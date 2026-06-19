@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head><title>Supabase Test</title></head>
+<body>
+<h2>Supabase Connection Test</h2>
+<div id="status">Testing...</div>
+<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+const SUPABASE_URL = 'https://bwcytavxwayqzlcbavas.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3Y3l0YXZ4d2F5cXpsY2JhdmFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3ODI5NzMsImV4cCI6MjA5NzM1ODk3M30.uNup4ziL-VBouM2z2FIMZo_c2ekOkW5wIc_wZDOgyd4';
+
+async function test() {
+  const el = document.getElementById('status');
+  try {
+    el.textContent = 'Loading Supabase library...';
+    if (typeof supabase === 'undefined') { el.textContent = 'ERROR: Supabase library failed to load'; return; }
+    el.textContent = 'Library loaded. Connecting...';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const { data, error } = await sb.from('stays').select('count');
+    if (error) { el.textContent = 'ERROR: ' + error.message + ' (code: ' + error.code + ')'; el.style.color='red'; }
+    else { el.textContent = 'SUCCESS! Connected to Supabase. Stays in database: ' + JSON.stringify(data); el.style.color='green'; }
+  } catch(e) { el.textContent = 'EXCEPTION: ' + e.message; el.style.color='red'; }
+}
+test();
+</script>
+</body>
+</html>
